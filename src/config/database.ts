@@ -14,6 +14,6 @@ export const AppDataSource = new DataSource({
   logging: false,
   ssl: {
     rejectUnauthorized: false, // Disable strict SSL validation
-    ca: process.env.DB_SSL // Use the SSL certificate from the .env file
+    ca: process.env.DB_SSL
   }
 });
