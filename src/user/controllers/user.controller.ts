@@ -46,21 +46,31 @@ export default class UserController {
   // New method for updating user details
   async updateUser(req: Request, res: Response): Promise<Response> {
     const { id } = req.params; // User ID from the URL
-    const { name, email, password } = req.body; // Fields to update
-
+    const { name, email, password, managerId } = req.body; // Fields to update
+  
     try {
       const userRepository = AppDataSource.getRepository(User);
+  
+      // Find the user to update
       const user = await userRepository.findOneBy({ id });
-
       if (!user) {
         return res.status(404).json({ message: "User not found!" });
       }
-
+  
       // Update only the fields provided in the request body
       if (name) user.name = name;
       if (email) user.email = email;
       if (password) user.password = password;
-
+  
+      // Update the manager if `managerId` is provided
+      if (managerId) {
+        const manager = await userRepository.findOneBy({ id: managerId });
+        if (!manager) {
+          return res.status(404).json({ message: "Manager not found!" });
+        }
+        user.manager = manager;
+      }
+  
       // Validate the updated user object
       const errors = await validate(user);
       if (errors.length > 0) {
@@ -69,21 +79,24 @@ export default class UserController {
           errors: errors.map((err) => err.constraints),
         });
       }
-
+  
+      // Save the updated user
       await userRepository.save(user);
-
+  
       const emailBody = accountUpdateTemplate(user.name, {
         email: email ?? undefined,
         password: password ?? undefined,
         name: name ?? undefined,
+        manager: managerId ? managerId : undefined,
       });
-
+  
+      // Send notification email
       await sendMail(
         user.email, // Use the updated email if changed
         messages.UPDATE_PROFILE, // Email subject
         emailBody
       );
-
+  
       return res.status(200).json({ message: "User updated successfully!", user });
     } catch (error) {
       return res.status(500).json({ error: error });
