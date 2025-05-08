@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
 import { User } from "../entities/user.entity";
-import { AppDataSource } from "../config/database";
+import { AppDataSource } from "../../config/database";
 
 class UserController {
   async register(req: Request, res: Response): Promise<Response> {
-    const { email, password } = req.body;
+    const { name, email, password } = req.body;
 
     try {
       const userRepository = AppDataSource.getRepository(User);
@@ -14,7 +14,7 @@ class UserController {
         return res.status(400).json({ message: "User already exists" });
       }
 
-      const newUser = userRepository.create({ email, password });
+      const newUser = userRepository.create({ name, email, password });
       await userRepository.save(newUser);
 
       return res.status(201).json(newUser);

@@ -8,8 +8,8 @@ export enum UserRole {
 
 @Entity()
 export class User {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column()
   name: string;
@@ -17,9 +17,8 @@ export class User {
   @Column({ unique: true })
   email: string;
 
-  @Column()
+  @Column({ default: true }) // Fix default value for isActive
   isActive: boolean;
-  default: true;
 
   @Column()
   password: string;

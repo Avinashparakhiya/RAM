@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppDataSource = void 0;
 const typeorm_1 = require("typeorm");
-const user_entity_1 = require("../entities/user.entity");
+const user_entity_1 = require("../user/entities/user.entity");
 require("dotenv/config");
 exports.AppDataSource = new typeorm_1.DataSource({
     type: "postgres",
@@ -16,6 +16,6 @@ exports.AppDataSource = new typeorm_1.DataSource({
     logging: false,
     ssl: {
         rejectUnauthorized: false, // Disable strict SSL validation
-        ca: process.env.DB_SSL // Use the SSL certificate from the .env file
+        ca: process.env.DB_SSL
     }
 });
