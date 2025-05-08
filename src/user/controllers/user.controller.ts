@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { User } from "../entities/user.entity";
 import { AppDataSource } from "../../config/database";
 
-class UserController {
+export default class UserController {
   async register(req: Request, res: Response): Promise<Response> {
     const { name, email, password } = req.body;
 
@@ -11,7 +11,7 @@ class UserController {
       const existingUser = await userRepository.findOneBy({ email });
 
       if (existingUser) {
-        return res.status(400).json({ message: "User already exists" });
+        return res.status(400).json({ message: "User already exists!" });
       }
 
       const newUser = userRepository.create({ name, email, password });
@@ -23,5 +23,3 @@ class UserController {
     }
   }
 }
-
-export default new UserController();
