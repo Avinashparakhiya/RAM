@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { User } from "../entities/user.entity";
+import { User, UserRole } from "../entities/user.entity";
 import { AppDataSource } from "../../config/database";
 import { validate } from "class-validator";
 import { accountUpdateTemplate, onboardTemplate } from "../../utils/sendNotificationTemplate";
@@ -85,6 +85,61 @@ export default class UserController {
       );
 
       return res.status(200).json({ message: "User updated successfully!", user });
+    } catch (error) {
+      return res.status(500).json({ error: error });
+    }
+  }
+
+  async login(req: Request, res: Response): Promise<Response> {
+    const { email, password } = req.body;
+
+    try {
+      const userRepository = AppDataSource.getRepository(User);
+      const user = await userRepository.findOneBy({ email });
+
+      if (!user) {
+        return res.status(404).json({ message: "User not found!" });
+      }
+
+      const errors = await validate(user);
+      if (errors.length > 0) {
+        return res.status(400).json({
+          message: "Validation failed!",
+          errors: errors.map((err) => err.constraints),
+        });
+      }
+
+      if (user.password !== password) {
+        return res.status(401).json({ message: "Invalid credentials!" });
+      }
+
+      return res.status(200).json({
+        message: "Login successful!",
+        user: {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          role: user.role,
+        },
+      });
+    } catch (error) {
+      return res.status(500).json({ error: error });
+    }
+  }
+
+  async getAllHODs(req: Request, res: Response): Promise<Response> {
+    try {
+      const userRepository = AppDataSource.getRepository(User);
+
+      // Fetch all users with the role 'HOD'
+      const hodUsers = await userRepository.find({
+        where: { role: UserRole.HOD,isActive: true },
+      });
+
+      return res.status(200).json({
+        message: "HOD users fetched successfully!",
+        data: hodUsers,
+      });
     } catch (error) {
       return res.status(500).json({ error: error });
     }

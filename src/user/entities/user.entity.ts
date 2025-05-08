@@ -1,4 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { 
+  Entity, 
+  PrimaryGeneratedColumn, 
+  Column, 
+  CreateDateColumn, 
+  UpdateDateColumn, 
+  ManyToOne 
+} from 'typeorm';
 import { IsEmail, IsNotEmpty } from "class-validator";
 
 export enum UserRole {
@@ -34,10 +41,15 @@ export class User {
   })
   role: UserRole;
 
+  @ManyToOne(() => User, (user) => user.subordinates, { nullable: true }) // Self-referential relationship
+  manager: User;
+
   @CreateDateColumn()
   createdAt: Date;
 
   @UpdateDateColumn()
   updatedAt: Date;
+  
+  // Add inverse relation for subordinates (optional, useful for querying)
+  subordinates: User[];
 }
-
