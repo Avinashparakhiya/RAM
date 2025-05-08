@@ -68,7 +68,7 @@ export const onboardTemplate = (name: string, email: string, password: string) =
 
 export const accountUpdateTemplate = (
     name: string,
-    updatedFields: { email?: string; password?: boolean; name?: string }
+    updatedFields: { email?: string; password?: boolean; name?: string, manager?: string }
 ): string => {
     const updatedDetails = [];
 
@@ -79,7 +79,10 @@ export const accountUpdateTemplate = (
         updatedDetails.push(`<li><strong>Email:</strong> ${updatedFields.email} (updated)</li>`);
     }
     if (updatedFields.password) {
-        updatedDetails.push(`<li><strong>Email:</strong> ${updatedFields.password} (updated)</li>`);
+        updatedDetails.push(`<li><strong>Password:</strong> (updated)</li>`);
+    }
+    if (updatedFields.manager) {
+        updatedDetails.push(`<li><strong>Manager:</strong> True (updated)</li>`);
     }
 
     return `
