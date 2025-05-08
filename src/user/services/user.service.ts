@@ -1,5 +1,5 @@
-import { AppDataSource } from "../config/database";
-import { User } from "../entities/user.entity";
+import { AppDataSource } from "../../config/database";
+import { User } from "../../user/entities/user.entity";
 
 export class UserService {
   private userRepository = AppDataSource.getRepository(User);
