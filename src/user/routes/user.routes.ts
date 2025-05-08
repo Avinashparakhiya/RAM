@@ -1,5 +1,6 @@
 import { Router } from "express";
 import UserController from "../controllers/user.controller";
+import UserSessionController from "../controllers/userSession.controller";
 
 const router = Router();
 
@@ -35,6 +36,24 @@ router.get("/hods", async (req, res, next) => {
     try {
         const userController = new UserController();
         await userController.getAllHODs(req, res);
+    } catch (error) {
+        next(error);
+    }
+});
+
+router.post("/checkin", async (req, res, next) => {
+    try {
+        const userSessionController = new UserSessionController();
+        await userSessionController.checkIn(req, res);
+    } catch (error) {
+        next(error);
+    }
+});
+
+router.post("/checkout", async (req, res, next) => {
+    try {
+        const userSessionController = new UserSessionController();
+        await userSessionController.checkOut(req, res);
     } catch (error) {
         next(error);
     }
