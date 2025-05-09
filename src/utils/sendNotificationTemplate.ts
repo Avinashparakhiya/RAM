@@ -1,3 +1,5 @@
+import { LeaveType } from "../user/entities/leave.entity";
+
 export const onboardTemplate = (name: string, email: string, password: string) => `
 <!DOCTYPE html>
 <html lang="en">
@@ -147,4 +149,90 @@ export const accountUpdateTemplate = (
       </div>
   </body>
   </html>`;
+};
+
+export const leaveRequestTemplate = (
+  name: string,
+  startDate: string,
+  endDate: string,
+  leaveType: LeaveType,
+  viewUrl: string
+): string => {
+  return `
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>New Leave Request</title>
+      <style>
+          body {
+              font-family: Arial, sans-serif;
+              background-color: #f4f4f4;
+              padding: 20px;
+          }
+          .container {
+              max-width: 600px;
+              margin: 0 auto;
+              background-color: #fff;
+              padding: 20px;
+              border-radius: 8px;
+              box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+          }
+          .header {
+              text-align: center;
+              background-color: #007bff;
+              color: white;
+              padding: 10px;
+              border-radius: 8px 8px 0 0;
+          }
+          .content {
+              padding: 20px;
+          }
+          .actions {
+              margin-top: 20px;
+              text-align: center;
+          }
+          .button {
+              display: inline-block;
+              padding: 12px 24px;
+              font-size: 16px;
+              border-radius: 5px;
+              text-decoration: none;
+              color: white;
+              background-color: #007bff;
+          }
+          .footer {
+              text-align: center;
+              margin-top: 30px;
+              font-size: 0.9em;
+              color: #777;
+          }
+      </style>
+  </head>
+  <body>
+      <div class="container">
+          <div class="header">
+              <h2>New Leave Request</h2>
+          </div>
+          <div class="content">
+              <p>Dear Manager,</p>
+              <p><strong>${name}</strong> has submitted a leave request with the following details:</p>
+              <ul>
+                  <li><strong>Leave Type:</strong> ${leaveType}</li>
+                  <li><strong>Start Date:</strong> ${startDate}</li>
+                  <li><strong>End Date:</strong> ${endDate}</li>
+              </ul>
+              <div class="actions">
+                  <a href="${viewUrl}" class="button">View Leave Request</a>
+              </div>
+              <p style="margin-top: 20px;">Please login to the system to take appropriate action.</p>
+          </div>
+          <div class="footer">
+              <p>&copy; 2025 RAM. All rights reserved.</p>
+          </div>
+      </div>
+  </body>
+  </html>
+  `;
 };
