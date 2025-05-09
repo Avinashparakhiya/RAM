@@ -52,4 +52,5 @@ export class User {
   
   // Add inverse relation for subordinates (optional, useful for querying)
   subordinates: User[];
+  leaves: any[];
 }
