@@ -74,7 +74,7 @@ export default class LeaveController {
         return res.status(404).json({ message: "Leave not found!" });
       }
 
-      if (leave.status !== 'pending') {
+      if (leave.status !== LeaveStatus.PENDING) { // fixed comparison
         return res.status(400).json({ message: "Leave request is already processed." });
       }
 
